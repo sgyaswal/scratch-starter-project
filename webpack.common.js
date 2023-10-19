@@ -1,50 +1,49 @@
-const webpack = require("webpack");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-module.exports = () => {
-  return {
-    module: {
-      rules: [
-        {
-          test: /\.(js|jsx)$/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader",
+module.exports = {
+  entry: {
+    app: "./src/index.js",
+  },
+  output: {
+    // filename: "app.js",
+    path: path.resolve(__dirname, "public"),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                plugins: [
+                  [
+                    "postcss-preset-env",
+                    {
+                      // Options
+                    },
+                  ],
+                ],
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
           },
         },
-        {
-          test: /\.html$/,
-          use: [
-            {
-              loader: "html-loader",
-            },
-          ],
-        },
-        {
-          test: /\.js$/,
-          enforce: "pre",
-          use: ["source-map-loader"],
-        },
-        {
-          test: /\.css$/i,
-          use: ["style-loader", "css-loader"],
-        },
-        {
-          test: /\.(png|svg|jpg|gif|jpeg)$/,
-          use: ["file-loader"],
-        },
-      ],
-    },
-    devtool: false,
-    devServer: {
-      historyApiFallback: true,
-    },
-    plugins: [
-      new HtmlWebPackPlugin({
-        template: "./public/index.html",
-        filename: "./index.html",
-      }),
-      new webpack.SourceMapDevToolPlugin({}),
+      },
     ],
-  };
+  },
+  plugins: [new MiniCssExtractPlugin()],
 };
