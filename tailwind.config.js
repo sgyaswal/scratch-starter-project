@@ -1,6 +1,15 @@
 module.exports = {
-  darkMode: "class",
-  purge: ["./src/**/*.js"],
-  variants: {},
+  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  darkMode: false,
+  theme: {
+    fontFamily: {
+      sans: ["Arial", "sans-serif"],
+    },
+
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
   plugins: [],
 };
